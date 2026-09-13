@@ -1,7 +1,8 @@
 /**
- * ask.mjs — 三问追问交互（逐问等待用户）
+ * ask.mjs — 三问追问交互（一次呈现三问，支持连答）
  *
- * 采集完成后固定三轮问题（过去/现在/未来），逐问在终端等待用户输入；
+ * 采集完成后固定三问（过去/现在/未来）一次全部呈现，用户可一次性连答（推荐，省时）；
+ * 也兼容逐问回答（每答以「---」分隔）或分次补充；
  * 用户口述与采集素材做「关联标记」（口述里提到的项目名 ↔ 采集条目证据）。
  * 用户不答（直接回车 / 超时 / --non-interactive）→ 该问记空值并标注【待补充：用户口述】，
  * 上游用采集数据先行出报告——不阻塞、不编造用户感受。
@@ -32,6 +33,33 @@ const QUESTIONS = [
     placeholder: '如：想把这套技能包装成培训课，让每个业务部门都装上……',
   },
 ];
+
+/** 连答解析：把一次输入按分隔符拆成三问答案
+ *  支持三种格式：
+ *  A) 一次粘贴三段，以行「---」分隔 → 依序对应过去/现在/未来
+ *  B) JSON 对象 {"past":"...","present":"...","future":"..."}
+ *  C) 空输入 → 全部跳过
+ */
+export function parseBatchAnswer(raw) {
+  const out = { past: '', present: '', future: '' };
+  if (!raw || !raw.trim()) return out;
+  const s = raw.trim();
+  if (s.startsWith('{')) {
+    try {
+      const j = JSON.parse(s);
+      for (const q of QUESTIONS) out[q.key] = String(j[q.key] || '').trim();
+      return out;
+    } catch { /* 非 JSON, 走分隔符 */ }
+  }
+  const parts = s.split(/^---+$/m).map(x => x.trim()).filter(Boolean);
+  if (parts.length >= 3) {
+    out.past = parts[0]; out.present = parts[1]; out.future = parts.slice(2).join('\n');
+  } else {
+    // 无分隔符: 单段输入 → 记入"现在"(最常见的单次表达), 其余标待补充
+    out.present = s;
+  }
+  return out;
+}
 
 /** 口述 → 采集素材关联标记：问题里提到的项目/文件关键词 ↔ 采集条目 */
 export function linkAnswersToEvidence(answers, collectResult) {
@@ -119,10 +147,31 @@ export async function runAsk({ collectFile = null, answersFile = null, timeoutMs
     console.log('[ask] 非交互模式：三轮问题全部标注【待补充：用户口述】，报告先行用采集数据生成。');
   } else {
     const nextLine = makeLineReader();
+    // 连答模式：一次呈现三问，用户可一次性回答（推荐）
+    console.log(`\n${'═'.repeat(60)}`);
+    console.log('【复盘三问】可以一次性连答（推荐）——三段答案之间用一行 --- 分隔；');
+    console.log('  也可以直接回车进入逐问模式；输入 JSON {"past":"…","present":"…","future":"…"} 亦可。');
     for (const q of QUESTIONS) {
-      console.log(`\n${'═'.repeat(60)}`);
-      console.log(`【${q.tag}】${q.text}`);
+      console.log(`\n【${q.tag}】${q.text}`);
       console.log(`  （示例：${q.placeholder}）`);
+    }
+    console.log(`\n${'─'.repeat(60)}`);
+    console.log('请粘贴你的回答（三段用 --- 分隔，或 JSON；直接回车=逐问模式）：');
+    process.stdout.write('> ');
+    const raw = await nextLine(Math.max(timeoutMs, 180000));
+    const batch = parseBatchAnswer(raw || '');
+    const gotAny = batch.past || batch.present || batch.future;
+    if (gotAny) {
+      Object.assign(answers, batch);
+      for (const q of QUESTIONS) {
+        if (answers[q.key]) console.log(`  ✓ ${q.tag}：已记录 ${answers[q.key].length} 字`);
+      }
+    }
+    // 逐问补漏：连答缺失的问项再单独问一轮（每问一次机会）
+    for (const q of QUESTIONS) {
+      if (answers[q.key]) continue;
+      console.log(`\n【${q.tag}】${q.text}`);
+      console.log(`  （示例：${q.placeholder}）（直接回车跳过）`);
       process.stdout.write('> ');
       const line = await nextLine(timeoutMs);
       answers[q.key] = (line || '').trim();

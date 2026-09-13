@@ -1,6 +1,6 @@
 ---
 name: study-report
-description: "学习复盘报告：自动采集近 48h 全部 Agent 工作痕迹（Claude Code/Codex/Trae/WorkBuddy/OpenClaw/元宝/Hermes/工作区）→ 三问追问感受 → 生成 skill-present 级 HTML 复盘 PPT → Storage+Gogs 双通道发布。适用：(1) 培训/研修结营复盘 (2) 数字生命工作总结 (3) 一键转发给学员 Agent 代跑全流程。"
+description: "学习复盘报告：自动采集近 48h 全部 Agent 工作痕迹（Claude Code/Codex/Trae/WorkBuddy/OpenClaw/元宝/Hermes/工作区）→ 三问追问（一次呈现三问，支持一次性连答：三段用 --- 分隔或 JSON；缺项再逐问补一轮）感受 → 生成 skill-present 级 HTML 复盘 PPT → Storage+Gogs 双通道发布。适用：(1) 培训/研修结营复盘 (2) 数字生命工作总结 (3) 一键转发给学员 Agent 代跑全流程。"
 description_en: "Learning retrospective: auto-collect 48h of all Agent work traces, ask the user three reflection questions, build a skill-present-grade HTML PPT report, and publish via Storage+Gogs dual channels. Triggers: training retrospective, agent work summary, forwardable one-click skill."
 ---
 
