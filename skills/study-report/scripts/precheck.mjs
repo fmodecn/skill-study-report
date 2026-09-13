@@ -20,6 +20,27 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { execFileSync } from 'node:child_process';
+const HOME = os.homedir();
+
+// 凭据本地缓存（~/.fmode/credentials/gogs.json, 600 权限）：
+// 首次开户成功后持久化 {username, token, savedAt}；后续运行直接复用，
+// 仅当缓存 token 校验失败（401/403）时才重调开户接口刷新缓存。
+// 已有 ~/.fmode 完整配置的用户天然命中缓存路径，零重复获取。
+const GOGS_CACHE = path.join(HOME, '.fmode', 'credentials', 'gogs.json');
+function readGogsCache() {
+  try {
+    if (!fs.existsSync(GOGS_CACHE)) return null;
+    const j = JSON.parse(fs.readFileSync(GOGS_CACHE, 'utf8'));
+    return (j.username && j.token) ? j : null;
+  } catch { return null; }
+}
+function writeGogsCache(username, token) {
+  try {
+    fs.mkdirSync(path.dirname(GOGS_CACHE), { recursive: true });
+    fs.writeFileSync(GOGS_CACHE, JSON.stringify({ username, token, savedAt: new Date().toISOString() }, null, 2));
+    fs.chmodSync(GOGS_CACHE, 0o600);
+  } catch { /* 缓存写失败不阻塞主流程 */ }
+}
 
 const FMODE_API_BASE = (process.env.FMODE_FUNCTIONS_BASE_URL || 'https://server.fmode.cn').replace(/\/$/, '');
 const GOGS_BASE = 'https://git.fmode.cn';
@@ -83,12 +104,22 @@ async function probePlatformReachable() {
 /* ── 环节 2：Git 账户（07-git.md 已验证链路）──────────────────── */
 async function ensureGitAccount(platformToken) {
   const row = { item: 'Git 账户', ok: false, detail: '', hint: '' };
+  // ① 本地缓存优先：有凭据直接复用（验证有效性，失败才刷新）
+  const cached = readGogsCache();
+  if (cached) {
+    const v = await fetch(`${GOGS_BASE}/api/v1/user`, { headers: { Authorization: `token ${cached.token}` }, signal: AbortSignal.timeout(15000) });
+    if (v.ok) {
+      return { row: { item: 'Git 账户', ok: true, detail: `本地缓存复用（${cached.username}，savedAt ${cached.savedAt.slice(0,10)}）`, hint: '' }, gogsToken: cached.token, gogsUser: cached.username };
+    }
+    row.hint = '缓存 token 已失效，重调开户接口刷新…';
+  }
   if (!platformToken) {
     row.detail = '跳过（无平台 token）';
     row.hint = '先恢复平台身份';
     return { row, gogsToken: null, gogsUser: null };
   }
-  const mobile = process.env.FMODE_MOBILE || 'user'; // 稳定用户标识，来自环境或默认
+  // ② 开户/刷新（幂等）
+  const mobile = process.env.FMODE_MOBILE || (cached && cached.username.replace(/^fmode-/, '')) || 'user'; // 稳定用户标识
   const username = `fmode-${mobile}`;
   try {
     const res = await fetch(`${FMODE_API_BASE}/api/functions`, {
@@ -135,7 +166,7 @@ async function ensureGitAccount(platformToken) {
       if (again.status === 200 && againBody.token && againBody.token.sha1) {
         row.ok = true;
         row.detail = `新建 Gogs 账户 ${againBody.username}，access token 已签发（sha1 ***${againBody.token.sha1.slice(-4)}）`;
-        return { row, gogsToken: againBody.token.sha1, gogsUser: againBody.username };
+        writeGogsCache(againBody.username, againBody.token.sha1); return { row, gogsToken: againBody.token.sha1, gogsUser: againBody.username };
       }
       row.detail = `账户已创建（201）但 token 续发未返回（${again.status}）`;
       row.hint = '重跑本自检（幂等）';
