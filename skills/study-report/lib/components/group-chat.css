@@ -1,0 +1,122 @@
+/* ============================================================
+ * lib/components/group-chat.css · 仿企业微信电脑端群聊窗
+ * 布局：顶部群名条 + 左成员列表 + 右消息流（电脑端横版）。
+ * 颜色全部来自 tokens.css 的 --chat-* / --brand-*，双主题自适应。
+ * ============================================================ */
+group-chat { display: block; width: 100%; }
+group-chat .gc {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--chat-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+group-chat .gc-empty { padding: 24px; text-align: center; color: var(--text-4); }
+
+/* 顶部群名条 */
+group-chat .gc-bar {
+  padding: 10px 16px;
+  background: var(--chat-bar-bg);
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: center;
+  color: var(--chat-bar-text);
+  font-size: 14px;
+  letter-spacing: .05em;
+  font-weight: 700;
+}
+group-chat .gc-bar .gc-sub {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  opacity: .7;
+  letter-spacing: .08em;
+}
+
+/* 主体：左成员 + 右消息 */
+group-chat .gc-main { display: flex; min-height: 260px; }
+
+group-chat .gc-members {
+  flex: 0 0 150px;
+  border-right: 1px solid var(--border-subtle);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--bg-1);
+}
+group-chat .gc-mem {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 6px;
+  border-radius: var(--radius-sm);
+}
+group-chat .gc-mem:hover { background: var(--bg-2); }
+group-chat .gc-mem-info { min-width: 0; }
+group-chat .gc-mem-name { font-size: 13px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+group-chat .gc-mem-role { font-size: 10px; color: var(--brand-2); font-family: var(--font-mono); }
+
+/* 右侧消息流 */
+group-chat .gc-msgs { flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; max-height: 500px; }
+
+group-chat .gc-msg { display: flex; gap: 10px; }
+group-chat .gc-ava {
+  flex: 0 0 34px; height: 34px;
+  border-radius: 6px;
+  background: var(--chat-avatar-bg);
+  color: var(--chat-avatar-text);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+}
+group-chat .gc-box { max-width: 78%; }
+group-chat .gc-name { font-size: 12px; color: var(--brand-2); margin-bottom: 2px; }
+group-chat .gc-text {
+  display: inline-block;
+  background: var(--chat-in-bg);
+  color: var(--chat-in-text);
+  padding: 6px 11px;
+  border-radius: 2px 8px 8px 8px;
+  word-break: break-word;
+}
+group-chat .gc-at {
+  color: var(--brand-1);
+  font-weight: 600;
+  border-radius: 3px;
+  background: var(--chat-card-bg);
+  padding: 0 3px;
+}
+
+/* 名片卡 */
+group-chat .gc-card {
+  border: 1px solid var(--chat-card-border);
+  background: var(--chat-card-bg);
+  border-radius: var(--radius-md);
+  padding: 9px 12px;
+  display: inline-block;
+  max-width: 100%;
+}
+group-chat .gc-card-t { color: var(--chat-link); font-weight: 700; font-size: 13px; }
+group-chat .gc-card-s { color: var(--text-3); font-size: 12px; margin-top: 2px; }
+group-chat .gc-card-g { color: var(--brand-ok); font-size: 11px; margin-top: 4px; font-family: var(--font-mono); }
+
+/* 底部 */
+group-chat .gc-foot {
+  padding: 8px 16px;
+  background: var(--chat-bar-bg);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--chat-time);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  text-align: center;
+  letter-spacing: .06em;
+}
+
+/* 收窄版（放入 .s-side 竖形素材列时用，收起左成员栏只留气泡流） */
+group-chat.gc-narrow .gc-members { display: none; }
+group-chat.gc-narrow .gc-main { min-height: auto; }
+group-chat.gc-narrow .gc-msgs { max-height: clamp(320px, 55vh, 520px); overflow-y: auto; padding: 12px; }
+group-chat.gc-narrow .gc-bar { padding: 8px 12px; font-size: 13px; }

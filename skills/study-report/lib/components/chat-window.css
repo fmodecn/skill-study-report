@@ -1,0 +1,122 @@
+/* ============================================================
+ * lib/components/chat-window.css · 仿微信一对一聊天窗
+ * 只使用 tokens.css 的 --chat-* 与 --bg-*/--text-*/--radius-*，双主题自适应。
+ * ============================================================ */
+chat-window { display: block; width: 100%; }
+chat-window .cw {
+  max-width: 400px;
+  margin: 0 auto;
+  background: var(--chat-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+chat-window .cw-empty { padding: 24px; text-align: center; color: var(--text-4); }
+
+/* 顶部条 */
+chat-window .cw-bar {
+  padding: 10px 14px;
+  background: var(--chat-bar-bg);
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: center;
+  color: var(--chat-bar-text);
+  font-size: 13px;
+  letter-spacing: .05em;
+}
+chat-window .cw-bar .cw-sub {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  opacity: .7;
+  letter-spacing: .08em;
+}
+
+/* 消息区 */
+chat-window .cw-body { padding: 14px 13px; display: flex; flex-direction: column; gap: 7px; }
+
+chat-window .cw-time {
+  text-align: center;
+  color: var(--chat-time);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  margin-bottom: 4px;
+}
+chat-window .cw-divider {
+  text-align: center;
+  color: var(--chat-time);
+  font-size: 11px;
+  margin: 6px 0;
+  letter-spacing: .1em;
+}
+
+/* 一条消息 */
+chat-window .cw-msg {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  max-width: 100%;
+}
+chat-window .cw-msg.out { flex-direction: row-reverse; }
+
+chat-window .cw-ava {
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--chat-avatar-bg);
+  color: var(--chat-avatar-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+chat-window .cw-bub {
+  max-width: 74%;
+  padding: 6px 11px;
+  border-radius: 2px 8px 8px 8px;
+  background: var(--chat-in-bg);
+  color: var(--chat-in-text);
+  word-break: break-word;
+}
+chat-window .cw-msg.out .cw-bub {
+  border-radius: 8px 2px 8px 8px;
+  background: var(--chat-out-bg);
+  color: var(--chat-out-text);
+}
+chat-window .cw-bub b { font-weight: 700; }
+
+/* 转账卡 */
+chat-window .cw-bub-transfer {
+  border: 1px solid var(--chat-card-border);
+  background: var(--chat-card-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+chat-window .cw-tf-label { color: var(--chat-link); font-weight: 700; font-size: 12px; }
+chat-window .cw-tf-amt { font-size: 17px; font-weight: 700; color: var(--brand-ok); }
+
+/* 图片消息 */
+chat-window .cw-img { width: 100%; border-radius: 6px; }
+chat-window .cw-cap { margin-top: 4px; font-size: 12px; color: var(--chat-time); }
+
+/* 引语 */
+chat-window .cw-bub-quote { border-left: 3px solid var(--chat-link); }
+chat-window .cw-q-src { margin-top: 4px; font-size: 11px; color: var(--chat-time); }
+
+/* 底部条 */
+chat-window .cw-foot {
+  padding: 8px 14px;
+  background: var(--chat-bar-bg);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--chat-time);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  text-align: center;
+  letter-spacing: .06em;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "skill-study-report",
+  "version": "0.1.0",
+  "description": "学习复盘报告技能：48h 多 Agent 采集 → 三问追问 → skill-present 级 HTML PPT 报告 → Storage+Gogs 双通道发布",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "precheck": "node skills/study-report/scripts/precheck.mjs",
+    "collect": "node skills/study-report/scripts/collect.mjs",
+    "ask": "node skills/study-report/scripts/ask.mjs",
+    "build": "node skills/study-report/scripts/build-report.mjs",
+    "publish": "node skills/study-report/scripts/publish.mjs"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fmodecn/skill-study-report.git"
+  },
+  "homepage": "https://github.com/fmodecn/skill-study-report#readme"
+}

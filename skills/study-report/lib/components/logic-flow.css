@@ -1,0 +1,40 @@
+/* ============================================================
+ * lib/components/logic-flow.css · 逻辑图组件样式
+ * 全部 var(--...) token，双主题自适应。零硬编码色值。
+ * ============================================================ */
+logic-flow {
+  display: block;
+  width: 100%;
+  /* 纵向高度预算：TB 方向逻辑图不撑出 .s-wrap，被 .screen{overflow:hidden} 裁掉。
+   * 页面可用 style="--lf-max-h:46vh" 按需覆盖。 */
+  --lf-max-h: 54vh;
+}
+
+logic-flow .logic-flow svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  max-height: var(--lf-max-h);
+}
+
+/* mermaid htmlLabels 的 foreignObject 标签文字随 token 字体 */
+logic-flow .logic-flow .nodeLabel,
+logic-flow .logic-flow .edgeLabel {
+  font-family: var(--font-body);
+}
+
+/* 降级 / 报错提示（mermaid 缺失或渲染失败时） */
+logic-flow .lf-degraded,
+logic-flow .lf-error {
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1vw, 14px);
+  color: var(--text-3);
+  white-space: pre-wrap;
+  padding: clamp(10px, 1.4vw, 18px);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--bg-2);
+}
+
+/* 报错用警示红 */
+logic-flow .lf-error { color: var(--brand-3); border-color: var(--border-danger); }

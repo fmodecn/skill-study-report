@@ -1,0 +1,191 @@
+/* ============================================================
+ * lib/theme/tokens.css · 混沌AI院设计系统 token 唯一来源
+ * 双主题：暗色（混沌AI院） / 浅色（未来飞马 VI）
+ * 任何文件不得新写色值/字体/圆角常量，一律引用本文件 var(--...)。
+ * 切换方式：<html data-theme="dark" | "light">（由 theme.js 管理）
+ * ============================================================ */
+
+:root {
+  /* ---------- 背景层级（0=最深 3=最浅浮层） ---------- */
+  --bg-0: #0B1017;                 /* 页面深底 */
+  --bg-1: #111925;                 /* 一级浮层 / 区块底 */
+  --bg-2: #171F2B;                 /* 卡片底 */
+  --bg-3: #0D131C;                 /* 浮层 / 弹层底 */
+
+  /* ---------- 文字层级（1=最高 4=最低） ---------- */
+  --text-1: #FBFAF7;               /* 大标题 / 核心结论 */
+  --text-2: #C1C4CB;               /* 主标题 / 正文 */
+  --text-3: #777D85;               /* 说明 / 次级 */
+  --text-4: rgba(255,255,255,.42); /* 弱化 / 页码 / 脚注 */
+
+  /* ---------- 品牌强调 ---------- */
+  --brand-1:    #D5B254;           /* 金：主强调 */
+  --brand-1-hi: #FFC000;           /* 金黄：框线 / 高亮 */
+  --brand-2:    #AF8AE8;           /* 浅紫：次级强调 */
+  --brand-3:    #FF0000;           /* 红：卡点 / 警示 */
+  --brand-ok:   #7FD1A0;           /* 绿：通过 / 已确认 */
+
+  /* ---------- 渐变 ---------- */
+  --gradient-brand: linear-gradient(135deg, #D5B254, #FFC000);
+  --gradient-text:  linear-gradient(135deg, #FFC000, #AF8AE8);
+  --on-gradient:    #0B1017;           /* 品牌渐变底上的文字色（暗=金渐变深字） */
+  --gradient-hero:  radial-gradient(ellipse at 50% 0%, rgba(213,178,84,.10) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 85%, rgba(175,138,232,.10) 0%, transparent 55%),
+                    linear-gradient(180deg, #0B1017 0%, #111925 60%, #0D131C 100%);
+
+  /* ---------- 边框 ---------- */
+  --border-subtle: rgba(255,255,255,.07);
+  --border-strong: rgba(213,178,84,.35);
+  --border-focus:  rgba(213,178,84,.6);
+  --border-danger: rgba(255,0,0,.45);        /* 警示红框（卡点 / 翻车） */
+  --border-ok:     rgba(127,209,160,.4);     /* 通过绿框（已确认 / 人味版） */
+
+  /* ---------- 阴影 ---------- */
+  --shadow-card:  none;                       /* 暗色用线框，不用投影 */
+  --shadow-float: 0 8px 30px rgba(0,0,0,.45);
+  --shadow-glow:  0 0 24px rgba(213,178,84,.25);
+
+  /* ---------- 圆角（混沌 = 直角卡片） ---------- */
+  --radius-sm: 3px;  --radius-md: 6px;  --radius-lg: 10px;
+  --radius-card: 0px;
+  --radius-pill: 999px;
+
+  /* ---------- 字体 ---------- */
+  --font-display: "Source Han Serif SC","Noto Serif SC","Songti SC","SimSun",serif;
+  --font-display-weight: 800;
+  --font-body: "Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-mono: "SF Mono","Cascadia Code","JetBrains Mono",Consolas,monospace;
+
+  /* ---------- 缓动 ---------- */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---------- 玻璃拟态 ---------- */
+  --glass-bg:   rgba(23,31,43,.85);
+  --glass-blur: 12px;
+
+  /* ---------- 屏幕 ---------- */
+  --screen-h: 100dvh;
+
+  /* ---------- 组件 token：微信/群聊 ---------- */
+  --chat-bg:          #111B21;
+  --chat-in-bg:       #202C33;   --chat-in-text: #E9EDEF;
+  --chat-out-bg:      #95EC69;   --chat-out-text: #111B21;
+  --chat-avatar-bg:   #5A6570;   --chat-avatar-text: #FFFFFF;
+  --chat-link:        #7FD1A0;
+  --chat-bar-bg:      #0B1017;   --chat-bar-text: #D5B254;
+  --chat-card-bg:     rgba(127,209,160,.06);
+  --chat-card-border: rgba(127,209,160,.4);
+  --chat-time:        #777D85;
+
+  /* ---------- 组件 token：多画像评估 ---------- */
+  /* 画像区分色（avatar 底 / 标签点 / 雷达线），双主题两套值 */
+  --persona-1:  #FFC000;  /* 决策层老板     */
+  --persona-2:  #AF8AE8;  /* 执行层操盘手   */
+  --persona-3:  #FF6B6B;  /* 一线业务经纪人 */
+  --persona-4:  #4FC3F7;  /* 技术 AI 工程师 */
+  --persona-5:  #7FD1A0;  /* 非技术市场 HR  */
+  --persona-6:  #FF9F43;  /* 行业老兵       */
+  --persona-7:  #F78FB3;  /* 课程采购负责人 */
+  --persona-8:  #00E5CC;  /* 挑剔同行讲师   */
+  --persona-9:  #B2B6BF;  /* 预留           */
+  --persona-10: #8BE9FD;  /* 预留           */
+
+  /* 问题优先级徽章色（色点/色条背景），P0 红 / P1 橙 / P2 黄 / P3 绿 */
+  --grade-p0: #FF0000;
+  --grade-p1: #FF9F43;
+  --grade-p2: #FFC000;
+  --grade-p3: #7FD1A0;
+  /* 徽章前景文字（双主题两套值，与背景成对） */
+  --grade-p0-fg: #FFFFFF;
+  --grade-p1-fg: #0B1017;
+  --grade-p2-fg: #0B1017;
+  --grade-p3-fg: #0B1017;
+}
+
+/* ============================================================
+ * 浅色 · 未来飞马 VI
+ * 主色：紫 #6C5CE7 / 蓝 #3B82F6 / 青 #0891B2
+ * 背景 #F8F9FC，玻璃卡 + 圆角 16 + 胶囊 50 + 柔和阴影，黑体标题
+ * ============================================================ */
+html[data-theme="light"] {
+  --bg-0: #F8F9FC;
+  --bg-1: #FFFFFF;
+  --bg-2: #F0F2F8;
+  --bg-3: #E9EBF3;
+
+  --text-1: #0F0F23;
+  --text-2: #1A1A2E;
+  --text-3: #4A4A6A;
+  --text-4: #6B7280;
+
+  --brand-1:    #6C5CE7;         /* 主品牌紫 */
+  --brand-1-hi: #3B82F6;         /* 辅蓝 */
+  --brand-2:    #0891B2;         /* 强调青 */
+  --brand-3:    #E5484D;
+  --brand-ok:   #16A34A;
+
+  --gradient-brand: linear-gradient(135deg, #6C5CE7, #3B82F6);
+  --gradient-text:  linear-gradient(135deg, #6C5CE7, #0891B2);
+  --on-gradient:    #FFFFFF;           /* 品牌渐变底上的文字色（浅=紫渐变白字） */
+  --gradient-hero:  linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F8F9FC 100%);
+
+  --border-subtle: rgba(15,15,35,.08);
+  --border-strong: rgba(108,92,231,.35);
+  --border-focus:  rgba(108,92,231,.6);
+  --border-danger: rgba(229,72,77,.45);
+  --border-ok:     rgba(22,163,74,.4);
+
+  --shadow-card:  0 4px 24px rgba(0,0,0,.06);
+  --shadow-float: 0 8px 32px rgba(0,0,0,.10);
+  --shadow-glow:  0 0 24px rgba(108,92,231,.20);
+
+  --radius-sm: 8px;  --radius-md: 12px;  --radius-lg: 16px;
+  --radius-card: 16px;
+  --radius-pill: 50px;
+
+  --font-display: "Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-display-weight: 700;
+
+  --glass-bg:   rgba(255,255,255,.85);
+  --glass-blur: 20px;
+
+  --chat-bg:          #FFFFFF;
+  --chat-in-bg:       #FFFFFF;   --chat-in-text: #1A1A2E;
+  --chat-out-bg:      #6C5CE7;   --chat-out-text: #FFFFFF;
+  --chat-avatar-bg:   #B9B1F5;   --chat-avatar-text: #FFFFFF;
+  --chat-link:        #6C5CE7;
+  --chat-bar-bg:      #F8F9FC;   --chat-bar-text: #6C5CE7;
+  --chat-card-bg:     rgba(108,92,231,.06);
+  --chat-card-border: rgba(108,92,231,.4);
+  --chat-time:        #9CA3AF;
+
+  /* 多画像评估（浅色：中深色系保证浅底可读） */
+  --persona-1:  #F59E0B;  /* 决策层老板     */
+  --persona-2:  #8B5CF6;  /* 执行层操盘手   */
+  --persona-3:  #E5484D;  /* 一线业务经纪人 */
+  --persona-4:  #3B82F6;  /* 技术 AI 工程师 */
+  --persona-5:  #16A34A;  /* 非技术市场 HR  */
+  --persona-6:  #EA580C;  /* 行业老兵       */
+  --persona-7:  #DB2777;  /* 课程采购负责人 */
+  --persona-8:  #0D9488;  /* 挑剔同行讲师   */
+  --persona-9:  #64748B;  /* 预留           */
+  --persona-10: #0EA5E9;  /* 预留           */
+
+  --grade-p0: #E5484D;
+  --grade-p1: #EA580C;
+  --grade-p2: #D97706;
+  --grade-p3: #16A34A;
+
+  --grade-p0-fg: #FFFFFF;
+  --grade-p1-fg: #FFFFFF;
+  --grade-p2-fg: #FFFFFF;
+  --grade-p3-fg: #FFFFFF;
+}
+
+/* ---------- 主题切换过渡（页面级，轻微即可） ---------- */
+html[data-theme] body,
+html[data-theme] .card,
+html[data-theme] .s-wrap {
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
